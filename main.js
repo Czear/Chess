@@ -1,3 +1,5 @@
+require('./main.scss')
+
 let app = void 0;
 let chessPieces = { 
     king : {
