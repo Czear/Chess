@@ -30,6 +30,48 @@ let chessPieces = {
     }
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+    bindUserUIActions()
+    app = new ChessGame
+    app.setBoard()
+})
+
+function nodeListToArray(nodeList) {
+    return  Array.prototype.slice.call(nodeList)
+}
+
+function bindUserUIActions() {
+    document.querySelector('.mian-nav .new-game').addEventListener('click', () => {
+        app.restart()
+    })
+
+    document.querySelector('.chess-board').addEventListener('click', (event) => {
+        let activeFigureClass = void (0)
+        let availableMoves = void (0)
+        const activeFigureElement = document.querySelector('.chess-figure.active')
+        const target = event.target
+        const figureElement = (target.classList.contains('figure-field') ? target.cloneNode(true) : target.parentElement).cloneNode(true)
+        const cordsConfig = app.getElementCords(target)
+        const targetFigureClass = app.getFigure(figureElement)
+
+        if(activeFigureElement) {
+            activeFigureClass = app.getFigure(activeFigureElement)
+            availableMoves = activeFigureClass ? activeFigureClass.getAvailableMoves(activeFigureClass.getFigureCords) : false
+        }
+
+        if(target.tagName === 'IMG') {
+            app.figureClicked(targetFigureClass, figureElement)
+        }
+
+        //console.log(typeof availableMoves, availableMoves)
+
+
+        if(activeFigureElement && availableMoves && availableMoves.filter(move => JSON.stringify(move) === JSON.stringify(cordsConfig)).length){
+            app.tryMoveFigure(cordsConfig)
+        }
+    })
+}
+
 class ChessGame {
     restart() {
         this.resetBoard()
