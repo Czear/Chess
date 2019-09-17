@@ -6,5 +6,12 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "webpack-output"),
         filename: "bundle.js",
-    }
+        publicPath: '/webpack-output/',
+    },
+    devServer: {
+        publicPath: '/webpack-output/',
+        watchContentBase: true,    
+        compress: true,
+    },
+    watch: true,
 }
