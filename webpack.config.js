@@ -26,5 +26,11 @@ module.exports = {
                 use: [ 'babel-loader', 'ts-loader']
             }
         ]
-    }
+    },
+    resolve: {
+        extensions: ['.ts', '.js', '.json'],
+        alias: {
+          '@Scripts': path.resolve(__dirname, 'Scripts/')
+        }
+      }
 }
