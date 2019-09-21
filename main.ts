@@ -166,7 +166,68 @@ export let chessPieces: chessPieces = {
     knight: {
         asset: 'Assets/chess-knight.svg',
         getAvailableMoves: cordsConfig => {
-            return [cordsConfig]
+
+            const validateJumpCords = (jumpCords: Cords[]): Cords[] | [] => {
+                let validCords: Cords[] = []
+
+                jumpCords.forEach((possibleCords: Cords) => {
+                    if(possibleCords.x > -1 && possibleCords.x < 8 && possibleCords.y > -1 && possibleCords.y < 8){
+                        const targetPiece = Utility.getFigureByCords(cordsConfig)
+                        const possiblePiece = Utility.getFigureByCords(possibleCords)
+
+                        if(targetPiece && possiblePiece && targetPiece.color !== possiblePiece.color) {
+                            validCords.push({
+                                ...possibleCords,
+                                isEnemy: true
+                            })
+                        }
+
+                        if(!possiblePiece) {
+                            validCords.push(possibleCords)
+                        }
+
+                    }
+                });
+
+                return validCords
+            }
+
+            const getKnightFields = (direction: Direction, axis: Axis): Cords[] => {
+                let Yincremeter = 0
+                let Xincremeter = 0
+
+                if(direction === 'up') {
+                    Yincremeter++
+                } else {
+                    Yincremeter--
+                }
+
+                if((direction === 'up' && axis === 'x') || (direction === 'down' && axis === 'y')){
+                    Xincremeter++
+                } else {
+                    Xincremeter--
+                }
+
+                const possibleJumpMoves = validateJumpCords([{
+                    x: cordsConfig.x + Xincremeter,
+                    y: cordsConfig.y + Yincremeter * 2
+                },{
+                    x: cordsConfig.x + Xincremeter * 2,
+                    y: cordsConfig.y + Yincremeter
+                }])
+
+                return possibleJumpMoves
+            }
+
+            const getFields = (checkingAxis: Axis) => {
+                const moveCors = [ ...getKnightFields('up', checkingAxis), ...getKnightFields('down', checkingAxis)]
+                return moveCors
+            }
+
+            return [
+                ...getFields('x'),
+                ...getFields('y')
+            ]
         }
     },
 
@@ -191,7 +252,7 @@ export let chessPieces: chessPieces = {
                             y : cordsConfig.y + 2 * addValue
                         })
                     }
-            }
+                }
 
             return moveCors
         }
