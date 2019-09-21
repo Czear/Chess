@@ -85,7 +85,7 @@ export let chessPieces: chessPieces = {
                 return moveCors
             }
 
-            const getFields = (checkingAxis: 'x' | 'y') => {
+            const getFields = (checkingAxis: Axis) => {
                 const moveCors = [ ...getStragightFields('up', checkingAxis), ...getStragightFields('down', checkingAxis)]
                 return moveCors
             }
@@ -102,7 +102,44 @@ export let chessPieces: chessPieces = {
     bishop: {
         asset: 'Assets/chess-bishop.svg',
         getAvailableMoves: cordsConfig => {
-            return [cordsConfig]
+
+            const getSlantFields = (direction: Direction, axis: Axis): Cords[] => {
+                let possibleMoves: Cords[] = [];
+
+                let Yincremeter = 0
+                let Xincremeter = 0
+
+                if(direction === 'up') {
+                    Yincremeter++
+                } else {
+                    Yincremeter--
+                }
+
+                if((direction === 'up' && axis === 'x') || (direction === 'down' && axis === 'y')){
+                    Xincremeter++
+                } else {
+                    Xincremeter--
+                }
+
+                for(let possibleX = cordsConfig.x+ Xincremeter, possibleY = cordsConfig.y + Yincremeter; (possibleX > -1 && possibleY > -1) && (possibleX < 8 && possibleY < 8); possibleX += Xincremeter, possibleY += Yincremeter){
+                    possibleMoves.push({
+                        x: possibleX,
+                        y: possibleY,
+                    })
+                }
+
+                return possibleMoves
+            }
+
+            const getFields = (checkingAxis: Axis): Cords[] => {
+                const moveCors = [ ...getSlantFields('up', checkingAxis), ...getSlantFields('down', checkingAxis)]
+                return moveCors
+            }
+
+            return [
+                ...getFields('x'),
+                ...getFields('y')
+            ]
         }
     },
 
@@ -146,11 +183,11 @@ export let chessPieces: chessPieces = {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    bindUserUIActions()
+    bindUIActions()
     Board.setBoard()
 })
 
-function bindUserUIActions() {
+function bindUIActions() {
     const newGameButton = document.querySelector('.mian-nav .new-game') || false
     const boardsElement = document.querySelector('.chess-board') || false
 
