@@ -40,7 +40,22 @@ export let chessPieces: chessPieces = {
     queen: {
         asset: 'Assets/chess-queen.svg',
         getAvailableMoves: cordsConfig => {
-            return [cordsConfig]
+            const getFields = (checkingAxis: Axis): Cords[] => {
+                let moveCors: Cords[] = []
+
+                    const moveFunctions = [Utility.getStragightFields, Utility.getSlantFields]
+
+                    moveFunctions.forEach(moveFunction => {
+                        moveCors.push(...moveFunction('up', checkingAxis, cordsConfig), ...moveFunction('down', checkingAxis, cordsConfig))
+                    })
+
+                return moveCors
+            }
+
+            return [
+                ...getFields('x'),
+                ...getFields('y')
+            ]
         }
     },
 
