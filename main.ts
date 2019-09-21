@@ -102,6 +102,7 @@ export let chessPieces: chessPieces = {
     bishop: {
         asset: 'Assets/chess-bishop.svg',
         getAvailableMoves: cordsConfig => {
+            const targetFigure = Utility.getFigureByCords(cordsConfig)
 
             const getSlantFields = (direction: Direction, axis: Axis): Cords[] => {
                 let possibleMoves: Cords[] = [];
@@ -121,11 +122,30 @@ export let chessPieces: chessPieces = {
                     Xincremeter--
                 }
 
-                for(let possibleX = cordsConfig.x+ Xincremeter, possibleY = cordsConfig.y + Yincremeter; (possibleX > -1 && possibleY > -1) && (possibleX < 8 && possibleY < 8); possibleX += Xincremeter, possibleY += Yincremeter){
-                    possibleMoves.push({
+                for(let possibleX = cordsConfig.x+ Xincremeter, possibleY = cordsConfig.y + Yincremeter; (possibleX > -1 && possibleY > -1) && (possibleX < 8 && possibleY < 8); possibleX += Xincremeter, possibleY += Yincremeter) {
+                    const possibleCords = {
                         x: possibleX,
-                        y: possibleY,
-                    })
+                        y: possibleY
+                    }
+                    let possibleFigure = Utility.getFigureByCords(possibleCords)
+
+                    if(targetFigure && possibleFigure) {
+                        if (possibleFigure.color !== targetFigure.color) {
+                            possibleMoves.push({
+                                ...possibleCords,
+                                isEnemy: true
+                            })
+                        }
+
+                        break;
+                    }
+
+                    if(!possibleFigure) {
+                        possibleMoves.push({
+                            ...possibleCords
+                        })
+                    }
+
                 }
 
                 return possibleMoves
