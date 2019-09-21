@@ -15,7 +15,6 @@ export let chessPieces: chessPieces = {
                     if(Xindex || Yindex){
                         let moveCords: Cords = {x: 0, y: 0};
 
-                        
                         moveCords.x = cordsConfig.x + Xindex
                         moveCords.y = cordsConfig.y + Yindex
     
@@ -41,52 +40,15 @@ export let chessPieces: chessPieces = {
     queen: {
         asset: 'Assets/chess-queen.svg',
         getAvailableMoves: cordsConfig => {
-            return [cordsConfig]
-        }
-    },
+            const getFields = (checkingAxis: Axis): Cords[] => {
+                let moveCors: Cords[] = []
 
-    rook: {
-        asset: 'Assets/chess-rook.svg',
-        getAvailableMoves: cordsConfig => {
-            const targetFigure = Utility.getFigureByCords(cordsConfig)
-            
-            const getStragightFields = (direction: Direction, axis: Axis) => {
-                let moveCors = []
-                if(!((direction === 'up' && cordsConfig[axis] === 7) || (direction === 'down' && cordsConfig[axis] === 0))) {
-                    let conditionNumber = 8
-                    let operation = 1
+                    const moveFunctions = [Utility.getStragightFields, Utility.getSlantFields]
 
-                    if(direction === 'down') {
-                        conditionNumber = -1
-                        operation = -1
-                    }
+                    moveFunctions.forEach(moveFunction => {
+                        moveCors.push(...moveFunction('up', checkingAxis, cordsConfig), ...moveFunction('down', checkingAxis, cordsConfig))
+                    })
 
-                    for(let iteration = cordsConfig[axis]+operation; iteration !== conditionNumber;iteration = iteration + operation) {
-                        let possibleCords = {...cordsConfig}
-                        possibleCords[axis] = iteration
-
-                        let possibleFigure = Utility.getFigureByCords(possibleCords)
-
-                        if(possibleFigure && targetFigure) {
-                            if(possibleFigure.color !== targetFigure.color) {
-                                possibleCords.isEnemy = true
-                                moveCors.push(possibleCords)
-                            }
-
-                            break
-                        } else {
-                            moveCors.push(possibleCords)
-                        }
-
-                        
-                    }
-                }
-
-                return moveCors
-            }
-
-            const getFields = (checkingAxis: 'x' | 'y') => {
-                const moveCors = [ ...getStragightFields('up', checkingAxis), ...getStragightFields('down', checkingAxis)]
                 return moveCors
             }
 
@@ -94,22 +56,104 @@ export let chessPieces: chessPieces = {
                 ...getFields('x'),
                 ...getFields('y')
             ]
-            
         }
+    },
 
+    rook: {
+        asset: 'Assets/chess-rook.svg',
+        getAvailableMoves: cordsConfig => {
+            const getFields = (checkingAxis: Axis): Cords[] => {
+                const moveCors = [ ...Utility.getStragightFields('up', checkingAxis, cordsConfig), ...Utility.getStragightFields('down', checkingAxis, cordsConfig)]
+                return moveCors
+            }
+
+            return [
+                ...getFields('x'),
+                ...getFields('y')
+            ]
+        }
     },
 
     bishop: {
         asset: 'Assets/chess-bishop.svg',
         getAvailableMoves: cordsConfig => {
-            return [cordsConfig]
+            const getFields = (checkingAxis: Axis): Cords[] => {
+                const moveCors = [ ...Utility.getSlantFields('up', checkingAxis, cordsConfig), ...Utility.getSlantFields('down', checkingAxis, cordsConfig)]
+                return moveCors
+            }
+
+            return [
+                ...getFields('x'),
+                ...getFields('y')
+            ]
         }
     },
 
     knight: {
         asset: 'Assets/chess-knight.svg',
         getAvailableMoves: cordsConfig => {
-            return [cordsConfig]
+
+            const validateJumpCords = (jumpCords: Cords[]): Cords[] | [] => {
+                let validCords: Cords[] = []
+
+                jumpCords.forEach((possibleCords: Cords) => {
+                    if(possibleCords.x > -1 && possibleCords.x < 8 && possibleCords.y > -1 && possibleCords.y < 8){
+                        const targetPiece = Utility.getFigureByCords(cordsConfig)
+                        const possiblePiece = Utility.getFigureByCords(possibleCords)
+
+                        if(targetPiece && possiblePiece && targetPiece.color !== possiblePiece.color) {
+                            validCords.push({
+                                ...possibleCords,
+                                isEnemy: true
+                            })
+                        }
+
+                        if(!possiblePiece) {
+                            validCords.push(possibleCords)
+                        }
+
+                    }
+                });
+
+                return validCords
+            }
+
+            const getKnightFields = (direction: Direction, axis: Axis): Cords[] => {
+                let Yincremeter = 0
+                let Xincremeter = 0
+
+                if(direction === 'up') {
+                    Yincremeter++
+                } else {
+                    Yincremeter--
+                }
+
+                if((direction === 'up' && axis === 'x') || (direction === 'down' && axis === 'y')){
+                    Xincremeter++
+                } else {
+                    Xincremeter--
+                }
+
+                const possibleJumpMoves = validateJumpCords([{
+                    x: cordsConfig.x + Xincremeter,
+                    y: cordsConfig.y + Yincremeter * 2
+                },{
+                    x: cordsConfig.x + Xincremeter * 2,
+                    y: cordsConfig.y + Yincremeter
+                }])
+
+                return possibleJumpMoves
+            }
+
+            const getFields = (checkingAxis: Axis) => {
+                const moveCors = [ ...getKnightFields('up', checkingAxis), ...getKnightFields('down', checkingAxis)]
+                return moveCors
+            }
+
+            return [
+                ...getFields('x'),
+                ...getFields('y')
+            ]
         }
     },
 
@@ -134,7 +178,7 @@ export let chessPieces: chessPieces = {
                             y : cordsConfig.y + 2 * addValue
                         })
                     }
-            }
+                }
 
             return moveCors
         }
@@ -146,11 +190,11 @@ export let chessPieces: chessPieces = {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    bindUserUIActions()
+    bindUIActions()
     Board.setBoard()
 })
 
-function bindUserUIActions() {
+function bindUIActions() {
     const newGameButton = document.querySelector('.mian-nav .new-game') || false
     const boardsElement = document.querySelector('.chess-board') || false
 

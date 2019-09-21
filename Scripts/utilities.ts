@@ -78,4 +78,90 @@ export class Utility {
 
         return figure
     }
+
+    static getStragightFields = (direction: Direction, axis: Axis, baseCords: Cords) => {
+        let moveCors = []
+        if(!((direction === 'up' && baseCords[axis] === 7) || (direction === 'down' && baseCords[axis] === 0))) {
+            let conditionNumber = 8
+            let operation = 1
+
+            if(direction === 'down') {
+                conditionNumber = -1
+                operation = -1
+            }
+
+            for(let iteration = baseCords[axis]+operation; iteration !== conditionNumber;iteration = iteration + operation) {
+                let possibleCords = {...baseCords}
+                possibleCords[axis] = iteration
+
+                const possibleFigure = Utility.getFigureByCords(possibleCords)
+                const targetFigure = Utility.getFigureByCords(baseCords)
+
+                if(possibleFigure && targetFigure) {
+                    if(possibleFigure.color !== targetFigure.color) {
+                        moveCors.push({
+                            ...possibleCords,
+                            isEnemy: true
+                        })
+                    }
+
+                    break
+                } else {
+                    moveCors.push(possibleCords)
+                }
+
+                
+            }
+        }
+
+        return moveCors
+    }
+
+    static getSlantFields = (direction: Direction, axis: Axis, baseCords: Cords): Cords[] => {
+        let possibleMoves: Cords[] = [];
+
+        let Yincremeter = 0
+        let Xincremeter = 0
+
+        if(direction === 'up') {
+            Yincremeter++
+        } else {
+            Yincremeter--
+        }
+
+        if((direction === 'up' && axis === 'x') || (direction === 'down' && axis === 'y')){
+            Xincremeter++
+        } else {
+            Xincremeter--
+        }
+
+        for(let possibleX = baseCords.x+ Xincremeter, possibleY = baseCords.y + Yincremeter; (possibleX > -1 && possibleY > -1) && (possibleX < 8 && possibleY < 8); possibleX += Xincremeter, possibleY += Yincremeter) {
+            const possibleCords = {
+                x: possibleX,
+                y: possibleY
+            }
+            const possibleFigure = Utility.getFigureByCords(possibleCords)
+            const targetFigure = Utility.getFigureByCords(baseCords)
+
+            if(targetFigure && possibleFigure) {
+                if (possibleFigure.color !== targetFigure.color) {
+                    possibleMoves.push({
+                        ...possibleCords,
+                        isEnemy: true
+                    })
+                }
+
+                break;
+            }
+
+            if(!possibleFigure) {
+                possibleMoves.push({
+                    ...possibleCords
+                })
+            }
+
+        }
+
+        return possibleMoves
+    }
 }
