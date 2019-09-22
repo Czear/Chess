@@ -21,10 +21,6 @@ export let chessPieces: chessPieces = {
                         if(moveCords.x >= 0 && moveCords.x < 8 && moveCords.y >= 0 && moveCords.y < 8){
                             const cordsFigure = Utility.getFigureByCords(moveCords)
 
-                                if(targetFigure && cordsFigure && cordsFigure.color !== targetFigure.color) {
-                                    moveCords.isEnemy = true
-                                }
-
                                 if(!cordsFigure || (targetFigure && cordsFigure && cordsFigure.color !== targetFigure.color)) {
                                     moveCors.push(moveCords)
                                 }     
@@ -103,8 +99,7 @@ export let chessPieces: chessPieces = {
 
                         if(targetPiece && possiblePiece && targetPiece.color !== possiblePiece.color) {
                             validCords.push({
-                                ...possibleCords,
-                                isEnemy: true
+                                ...possibleCords
                             })
                         }
 

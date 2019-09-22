@@ -1,5 +1,4 @@
 interface Cords {
-    isEnemy?: boolean
     x: number,
     y: number,
 }
@@ -15,6 +14,7 @@ interface Piece {
     getAvailableMoves: availableMoves
     logFigure: () => void
     move: (cordsConfig: Cords) => void
+    remove: () => void
 }
 
 interface chessPieces {

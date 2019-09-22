@@ -112,8 +112,7 @@ export class Utility {
                 if(possibleFigure && targetFigure) {
                     if(possibleFigure.color !== targetFigure.color) {
                         moveCors.push({
-                            ...possibleCords,
-                            isEnemy: true
+                            ...possibleCords
                         })
                     }
 
@@ -158,8 +157,7 @@ export class Utility {
             if(targetFigure && possibleFigure) {
                 if (possibleFigure.color !== targetFigure.color) {
                     possibleMoves.push({
-                        ...possibleCords,
-                        isEnemy: true
+                        ...possibleCords
                     })
                 }
 
