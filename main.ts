@@ -228,11 +228,10 @@ function bindUIActions() {
                 }
     
                 if(activeFigureElement && activeFigure && activeFigureAvailableMoves.filter(move => JSON.stringify(move) === JSON.stringify(targetCords)).length) {
+                    activeFigure.move(targetCords)
                     if(targetFigure && activeFigure.color !== targetFigure.color) {
-                        //enemy piece in the way
-                    } else {
-                        activeFigure.move(targetCords)
-                    }
+                        targetFigure.remove()
+                    } 
                 } else if (activeFigure && targetFigure && activeFigure.color === targetFigure.color && JSON.stringify(targetCords) !== JSON.stringify(activeFigureCords)) {
                     Utility.deactivateFigure(activeFigure)
                     Utility.activateFigure(targetFigure)
