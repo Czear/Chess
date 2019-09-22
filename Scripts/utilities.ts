@@ -48,7 +48,7 @@ export class Utility {
     }
 
     static getElementCords(element: HTMLElement): Cords | undefined {
-        const rowElement = element.parentElement || false
+        const rowElement = element.parentElement
 
         if(rowElement && rowElement.parentElement) {
             return {
@@ -79,7 +79,7 @@ export class Utility {
         return this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x]
     }
 
-    static getFigureByCords(cordsConfig: Cords): Piece | undefined {
+    static getFigureByCords(cordsConfig: Cords): Piece {
         const figureHTMLElement = this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x]
 
         let figure: Piece | undefined;
@@ -88,7 +88,7 @@ export class Utility {
             figure = this.getFigureByFigureField(figureHTMLElement)
         }
 
-        return figure
+        return <Piece>figure
     }
 
     static getStragightFields = (direction: Direction, axis: Axis, baseCords: Cords) => {
