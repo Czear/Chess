@@ -237,7 +237,7 @@ function bindUIActions() {
 export class Piece {
     [x: string]: any
     public getAvailableMoves: availableMoves
-    constructor(public pieceType: PieceType, public color: Color) {
+    constructor(public pieceType: PieceType, public color: Color, public isActive = false) {
         this.getAvailableMoves = chessPieces[this.getPieceLabel].getAvailableMoves
     }
 

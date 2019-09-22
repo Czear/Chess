@@ -5,7 +5,7 @@ interface Cords {
 }
 
 interface Piece {
-    isActive?: boolean
+    isActive: boolean
     pieceType: PieceType
     color: Color
     getPieceLabel: PieceType
