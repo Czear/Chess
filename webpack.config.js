@@ -30,7 +30,8 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         alias: {
-          '@Scripts': path.resolve(__dirname, 'Scripts/')
+            '@Assets': path.resolve(__dirname, 'Assets/'),
+            '@Scripts': path.resolve(__dirname, 'Scripts/')
         }
       }
 }
