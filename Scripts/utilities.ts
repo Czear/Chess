@@ -5,28 +5,18 @@ export class Utility {
         return  Array.prototype.slice.call(nodeList)
     }
 
-    static figureClicked(figureClass: Piece, figureElement: HTMLElement) {
-        this.deactivateFigures()
-
-        if(!figureClass.isActive && figureElement.classList.contains('active')) {  
+    static selfFigureClicked(figureClass: Piece) {
+        if(figureClass.isActive) {  
             this.deactivateFigure(figureClass)
         } else {
+            this.deactivateFigures()
             this.activateFigure(figureClass)
-        }
-    }
-
-    static tryMoveFigure(targetCords: Cords, availableMoves=0) {
-        const activeFigureElement = <HTMLElement>document.querySelector('.chess-figure.active')
-        const figureToMove = this.getFigure(activeFigureElement)
-        if(activeFigureElement && figureToMove) {
-            figureToMove.move(targetCords)
-            activeFigureElement.classList.remove('active')
         }
     }
 
     static deactivateFigures() {
         document.querySelectorAll('.chess-figure').forEach(singleElement => {
-            const figureToDeactivate = this.getFigure(<HTMLElement>singleElement)
+            const figureToDeactivate = this.getFigureByFigureField(<HTMLElement>singleElement.parentElement)
             
             if(figureToDeactivate) {
                 this.deactivateFigure(figureToDeactivate)
@@ -35,25 +25,30 @@ export class Utility {
     }
 
     static deactivateFigure(figureClass: Piece ): void {
-        if(figureClass.isActive){
+        const figure = figureClass.getFigureDOMElement
+        if(figureClass.isActive && figure){
             figureClass.isActive = false
-            figureClass.getFigureDOMElement.classList.remove('active')
+            figure.classList.remove('active')
         }
     }
 
     static activateFigure(figureClass: Piece ) {
-        if(!figureClass.isActive){
+        const figure = figureClass.getFigureDOMElement
+        if(!figureClass.isActive && figure){
             figureClass.isActive = true
-            figureClass.getFigureDOMElement.classList.add('active')
+            figure.classList.add('active')
         }
     }
 
-    static getFigure(figureElement: HTMLElement): Piece | undefined {
-        return chessPieces.figures[figureElement.dataset.color + '-' + figureElement.dataset.type]
+    static getFigureByFigureField(figureElement: HTMLElement): Piece | undefined {
+        const chessFiugreElement = <HTMLElement>figureElement.firstChild
+        if(chessFiugreElement) {
+            return chessPieces.figures[chessFiugreElement.dataset.color + '-' + chessFiugreElement.dataset.type]
+        }
     }
 
     static getElementCords(element: HTMLElement): Cords | undefined {
-        const rowElement = element.parentElement || false
+        const rowElement = element.parentElement
 
         if(rowElement && rowElement.parentElement) {
             return {
@@ -63,20 +58,37 @@ export class Utility {
         }
     }
 
+    static getFigureFieldOfElement = (element: HTMLElement): HTMLElement | undefined => {
+        let elementToReturn: HTMLElement | undefined;
+
+
+        if(element.classList.contains('figure-field')) {
+            elementToReturn = <HTMLElement>element
+        } else if(element.classList.contains('chess-figure')) {
+            elementToReturn = <HTMLElement>element.parentElement
+        } else if (element.nodeName === 'IMG') {
+            if(element.parentElement) {
+                elementToReturn = <HTMLElement>element.parentElement.parentElement
+            }
+        }
+ 
+        return elementToReturn
+    }
+
     static getElemenyByCords(cordsConfig: Cords): HTMLElement  {
         return this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x]
     }
 
-    static getFigureByCords(cordsConfig: Cords): Piece | undefined {
+    static getFigureByCords(cordsConfig: Cords): Piece {
         const figureHTMLElement = this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x]
 
         let figure: Piece | undefined;
 
-        if(figureHTMLElement.firstChild) {
-            figure = this.getFigure(figureHTMLElement.firstChild)
+        if(figureHTMLElement) {
+            figure = this.getFigureByFigureField(figureHTMLElement)
         }
 
-        return figure
+        return <Piece>figure
     }
 
     static getStragightFields = (direction: Direction, axis: Axis, baseCords: Cords) => {
