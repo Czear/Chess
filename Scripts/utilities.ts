@@ -58,6 +58,23 @@ export class Utility {
         }
     }
 
+    static getFigureFieldOfElement = (element: HTMLElement): HTMLElement | undefined => {
+        let elementToReturn: HTMLElement | undefined;
+
+
+        if(element.classList.contains('figure-field')) {
+            elementToReturn = <HTMLElement>element
+        } else if(element.classList.contains('chess-figure')) {
+            elementToReturn = <HTMLElement>element.parentElement
+        } else if (element.nodeName === 'IMG') {
+            if(element.parentElement) {
+                elementToReturn = <HTMLElement>element.parentElement.parentElement
+            }
+        }
+ 
+        return elementToReturn
+    }
+
     static getElemenyByCords(cordsConfig: Cords): HTMLElement  {
         return this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x]
     }
