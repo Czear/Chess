@@ -5,12 +5,12 @@ module.exports = {
     entry: "./main.ts",
     watch: true,
     output: {
-        path: path.resolve(__dirname, "webpack-output"),
+        path: path.resolve(__dirname, "dist"),
         filename: "bundle.js",
-        publicPath: '/webpack-output/',
+        publicPath: '/dist/',
     },
     devServer: {
-        publicPath: '/webpack-output/',
+        publicPath: '/dist/',
         watchContentBase: true,    
         compress: true,
     },
@@ -18,19 +18,20 @@ module.exports = {
         rules: [
             {
                 test: /\.scss$/,
-                use: [ 'style-loader', 'css-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.ts$/,
                 exclude: /(node_modules|bower_components)/,
-                use: [ 'babel-loader', 'ts-loader']
+                use: ['babel-loader', 'ts-loader']
             }
         ]
     },
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         alias: {
-          '@Scripts': path.resolve(__dirname, 'Scripts/')
+            '@Assets': path.resolve(__dirname, 'Assets/'),
+            '@Scripts': path.resolve(__dirname, 'Scripts/')
         }
       }
 }
