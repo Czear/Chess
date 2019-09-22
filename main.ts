@@ -21,10 +21,6 @@ export let chessPieces: chessPieces = {
                         if(moveCords.x >= 0 && moveCords.x < 8 && moveCords.y >= 0 && moveCords.y < 8){
                             const cordsFigure = Utility.getFigureByCords(moveCords)
 
-                                if(targetFigure && cordsFigure && cordsFigure.color !== targetFigure.color) {
-                                    moveCords.isEnemy = true
-                                }
-
                                 if(!cordsFigure || (targetFigure && cordsFigure && cordsFigure.color !== targetFigure.color)) {
                                     moveCors.push(moveCords)
                                 }     
@@ -101,14 +97,7 @@ export let chessPieces: chessPieces = {
                         const targetPiece = Utility.getFigureByCords(cordsConfig)
                         const possiblePiece = Utility.getFigureByCords(possibleCords)
 
-                        if(targetPiece && possiblePiece && targetPiece.color !== possiblePiece.color) {
-                            validCords.push({
-                                ...possibleCords,
-                                isEnemy: true
-                            })
-                        }
-
-                        if(!possiblePiece) {
+                        if(!possiblePiece || (possiblePiece.color !== targetPiece.color)) {
                             validCords.push(possibleCords)
                         }
 
@@ -165,12 +154,30 @@ export let chessPieces: chessPieces = {
 
                 if(targetFigure) {
                     const addValue = targetFigure.color === 'white' ? 1 : -1
-
-                    moveCors.push({
+                    const nextFieldCords: Cords = {
                         ...cordsConfig,
                         y : cordsConfig.y + addValue
+                    }
+
+                    const potentialEnemiesSpots = [{
+                        ...nextFieldCords,
+                        x: nextFieldCords.x-1
+                    },{
+                        ...nextFieldCords,
+                        x: nextFieldCords.x+1
+                    }]
+
+                    if(!Utility.getFigureByCords(nextFieldCords)) {
+                        moveCors.push(nextFieldCords)
+                    }
+
+                    potentialEnemiesSpots.forEach(possibleEnemyCords => {
+                        const possibleEnemyPiece = Utility.getFigureByCords(possibleEnemyCords)
+
+                        if(possibleEnemyPiece && possibleEnemyPiece.color !== targetFigure.color) {
+                            moveCors.push(possibleEnemyCords)
+                        }
                     })
-        
         
                     if((targetFigure.color === 'black' && cordsConfig.y === 6) || (targetFigure.color === 'white' && cordsConfig.y === 1)) {
                         moveCors.push({
@@ -207,27 +214,27 @@ function bindUIActions() {
     if(boardsElement) {
         boardsElement.addEventListener('click', event => {
             const target = <HTMLElement>event.target || false
-            if(target && target.parentElement) {
-                let activeFigureClass: Piece | undefined;
-                let availableMoves: Cords[] | boolean = false
+            const targetFigureField =  <HTMLElement>Utility.getFigureFieldOfElement(target)
+            const targetCords = targetFigureField ? <Cords>Utility.getElementCords(targetFigureField) : false
+            if(targetCords) {
                 const activeFigureElement = <HTMLElement>document.querySelector('.chess-figure.active')
-                const figureElement = <HTMLElement>(target.classList.contains('figure-field') ? target.cloneNode(true) : target.parentElement).cloneNode(true)
-                const cordsConfig = Utility.getElementCords(target)
-                const targetFigureClass = Utility.getFigure(figureElement)
-        
-                if(activeFigureElement) {
-                    activeFigureClass = Utility.getFigure(activeFigureElement)
-                    if(activeFigureClass && activeFigureClass.getFigureCords) {
-                        availableMoves = activeFigureClass.getAvailableMoves(activeFigureClass.getFigureCords)
-                    }
+                const activeFigure = activeFigureElement && activeFigureElement.parentElement ? Utility.getFigureByFigureField(activeFigureElement.parentElement) : false
+                const activeFigureCords = activeFigure ? activeFigure.getFigureCords : false
+                const activeFigureAvailableMoves = activeFigure ? activeFigure.getAvailableMoves(<Cords>activeFigure.getFigureCords) : []
+                const targetFigure = Utility.getFigureByCords(targetCords)   
+    
+                if((!activeFigureElement && targetFigureField.firstChild) || (activeFigure && JSON.stringify(activeFigure.getFigureCords) === JSON.stringify(targetCords))) {
+                    Utility.selfFigureClicked(Utility.getFigureByCords(targetCords))
                 }
-        
-                if(target.tagName === 'IMG' && targetFigureClass) {
-                    Utility.figureClicked(targetFigureClass, figureElement)
-                }
-        
-                if(cordsConfig && activeFigureElement && availableMoves && availableMoves.filter(move => JSON.stringify(move) === JSON.stringify(cordsConfig)).length){
-                    Utility.tryMoveFigure(cordsConfig)
+    
+                if(activeFigureElement && activeFigure && activeFigureAvailableMoves.filter(move => JSON.stringify(move) === JSON.stringify(targetCords)).length) {
+                    activeFigure.move(targetCords)
+                    if(targetFigure && activeFigure.color !== targetFigure.color) {
+                        targetFigure.remove()
+                    } 
+                } else if (activeFigure && targetFigure && activeFigure.color === targetFigure.color && JSON.stringify(targetCords) !== JSON.stringify(activeFigureCords)) {
+                    Utility.deactivateFigure(activeFigure)
+                    Utility.activateFigure(targetFigure)
                 }
             }
         })
@@ -237,7 +244,7 @@ function bindUIActions() {
 export class Piece {
     [x: string]: any
     public getAvailableMoves: availableMoves
-    constructor(public pieceType: PieceType, public color: Color) {
+    constructor(public pieceType: PieceType, public color: Color, public isActive = false) {
         this.getAvailableMoves = chessPieces[this.getPieceLabel].getAvailableMoves
     }
 
@@ -247,22 +254,49 @@ export class Piece {
 
     move(cordsConfig: Cords) {
         const figureCords = this.getFigureCords
+
         if(figureCords) {
             const figureElement = this.getFigureDOMElement
             const finishMoveSequence = () => {
                 const figureElement = <HTMLElement>this.getFigureDOMElement
                 if(figureElement) {
-                    figureElement.style.transform = ''
+                    figureElement.removeAttribute('style');
                     figureElement.classList.remove('transforming')
                     Utility.getElemenyByCords(cordsConfig).appendChild(figureElement)
                     figureElement.removeEventListener('transitionend', finishMoveSequence)
+                    Utility.getFigureByCords(cordsConfig).isActive = false
                 }
             }
+
+            if(figureElement) {
+                figureElement.addEventListener('transitionend', finishMoveSequence)
     
-            figureElement.addEventListener('transitionend', finishMoveSequence)
-    
-            this.getFigureDOMElement.classList.add('transforming')
-            this.getFigureDOMElement.style.transform = `translateY(${100 * (figureCords.y - cordsConfig.y)}%) translateX(${100 * (cordsConfig.x - figureCords.x)}%)`
+                figureElement.classList.add('transforming')
+                figureElement.classList.remove('active')
+
+                figureElement.style.transform = `translateY(${100 * (figureCords.y - cordsConfig.y)}%) translateX(${100 * (cordsConfig.x - figureCords.x)}%)`
+            }
+
+        }
+    }
+
+    remove() {
+        const elementToRemove = this.getFigureDOMElement
+
+        if(elementToRemove) {
+                const finishRemoveSequence = () => {
+                    const figureElement = <HTMLElement>this.getFigureDOMElement
+                    if(figureElement) {
+                        figureElement.removeAttribute('style');
+                        figureElement.classList.remove('transforming')
+                        figureElement.removeEventListener('transitionend', finishRemoveSequence)
+                        elementToRemove.remove()
+                    }
+                }
+
+                elementToRemove.addEventListener('transitionend', finishRemoveSequence)
+                elementToRemove.classList.add('transforming')
+                elementToRemove.style.opacity = '0' 
         }
     }
 
@@ -284,13 +318,13 @@ export class Piece {
         return pieceElement
     }
 
-    get getFigureDOMElement (): HTMLElement {
-        return  document.querySelector(`[data-color="${this.color}"][data-type="${this.pieceType}"]`) || document.body
+    get getFigureDOMElement (): HTMLElement | undefined {
+        return  <HTMLElement>document.querySelector(`[data-color="${this.color}"][data-type="${this.pieceType}"]`) || undefined
     }
 
     get getFigureCords(): Cords | undefined {
         if(this.getFigureDOMElement) {
-            const rowElement:HTMLElement = this.getFigureDOMElement.closest('.chess-row') || document.body
+            const rowElement = <HTMLElement>this.getFigureDOMElement.closest('.chess-row')
 
             if(rowElement.parentElement) {
                 return {

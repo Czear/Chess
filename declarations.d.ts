@@ -1,20 +1,20 @@
 interface Cords {
-    isEnemy?: boolean
     x: number,
     y: number,
 }
 
 interface Piece {
-    isActive?: boolean
+    isActive: boolean
     pieceType: PieceType
     color: Color
     getPieceLabel: PieceType
     getPieceElement: HTMLDivElement
-    getFigureDOMElement: HTMLElement
+    getFigureDOMElement: HTMLElement | undefined
     getFigureCords: Cords | undefined
     getAvailableMoves: availableMoves
     logFigure: () => void
     move: (cordsConfig: Cords) => void
+    remove: () => void
 }
 
 interface chessPieces {
