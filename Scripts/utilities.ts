@@ -5,12 +5,11 @@ export class Utility {
         return  Array.prototype.slice.call(nodeList)
     }
 
-    static figureClicked(figureClass: Piece, figureElement: HTMLElement) {
-        this.deactivateFigures()
-
-        if(!figureClass.isActive && figureElement.classList.contains('active')) {  
+    static selfFigureClicked(figureClass: Piece) {
+        if(figureClass.isActive) {  
             this.deactivateFigure(figureClass)
         } else {
+            this.deactivateFigures()
             this.activateFigure(figureClass)
         }
     }
