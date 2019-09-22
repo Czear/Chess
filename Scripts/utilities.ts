@@ -25,9 +25,10 @@ export class Utility {
     }
 
     static deactivateFigure(figureClass: Piece ): void {
-        if(figureClass.isActive){
+        const figure = figureClass.getFigureDOMElement
+        if(figureClass.isActive && figure){
             figureClass.isActive = false
-            figureClass.getFigureDOMElement.classList.remove('active')
+            figure.classList.remove('active')
         }
     }
 
