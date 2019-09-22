@@ -16,7 +16,7 @@ export class Utility {
 
     static deactivateFigures() {
         document.querySelectorAll('.chess-figure').forEach(singleElement => {
-            const figureToDeactivate = this.getFigure(<HTMLElement>singleElement)
+            const figureToDeactivate = this.getFigureByFigureField(<HTMLElement>singleElement.parentElement)
             
             if(figureToDeactivate) {
                 this.deactivateFigure(figureToDeactivate)
@@ -40,8 +40,11 @@ export class Utility {
         }
     }
 
-    static getFigure(figureElement: HTMLElement): Piece | undefined {
-        return chessPieces.figures[figureElement.dataset.color + '-' + figureElement.dataset.type]
+    static getFigureByFigureField(figureElement: HTMLElement): Piece | undefined {
+        const chessFiugreElement = <HTMLElement>figureElement.firstChild
+        if(chessFiugreElement) {
+            return chessPieces.figures[chessFiugreElement.dataset.color + '-' + chessFiugreElement.dataset.type]
+        }
     }
 
     static getElementCords(element: HTMLElement): Cords | undefined {
@@ -64,8 +67,8 @@ export class Utility {
 
         let figure: Piece | undefined;
 
-        if(figureHTMLElement.firstChild) {
-            figure = this.getFigure(figureHTMLElement.firstChild)
+        if(figureHTMLElement) {
+            figure = this.getFigureByFigureField(figureHTMLElement)
         }
 
         return figure
