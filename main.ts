@@ -97,13 +97,7 @@ export let chessPieces: chessPieces = {
                         const targetPiece = Utility.getFigureByCords(cordsConfig)
                         const possiblePiece = Utility.getFigureByCords(possibleCords)
 
-                        if(targetPiece && possiblePiece && targetPiece.color !== possiblePiece.color) {
-                            validCords.push({
-                                ...possibleCords
-                            })
-                        }
-
-                        if(!possiblePiece) {
+                        if(!possiblePiece || (possiblePiece.color !== targetPiece.color)) {
                             validCords.push(possibleCords)
                         }
 
