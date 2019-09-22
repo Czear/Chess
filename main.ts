@@ -261,7 +261,7 @@ export class Piece {
             const finishMoveSequence = () => {
                 const figureElement = <HTMLElement>this.getFigureDOMElement
                 if(figureElement) {
-                    figureElement.style.transform = ''
+                    figureElement.removeAttribute('style');
                     figureElement.classList.remove('transforming')
                     Utility.getElemenyByCords(cordsConfig).appendChild(figureElement)
                     figureElement.removeEventListener('transitionend', finishMoveSequence)
