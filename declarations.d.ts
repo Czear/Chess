@@ -10,7 +10,7 @@ interface Piece {
     color: Color
     getPieceLabel: PieceType
     getPieceElement: HTMLDivElement
-    getFigureDOMElement: HTMLElement
+    getFigureDOMElement: HTMLElement | undefined
     getFigureCords: Cords | undefined
     getAvailableMoves: availableMoves
     logFigure: () => void

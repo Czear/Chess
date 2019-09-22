@@ -291,13 +291,13 @@ export class Piece {
         return pieceElement
     }
 
-    get getFigureDOMElement (): HTMLElement {
-        return  document.querySelector(`[data-color="${this.color}"][data-type="${this.pieceType}"]`) || document.body
+    get getFigureDOMElement (): HTMLElement | undefined {
+        return  <HTMLElement>document.querySelector(`[data-color="${this.color}"][data-type="${this.pieceType}"]`) || undefined
     }
 
     get getFigureCords(): Cords | undefined {
         if(this.getFigureDOMElement) {
-            const rowElement:HTMLElement = this.getFigureDOMElement.closest('.chess-row') || document.body
+            const rowElement = <HTMLElement>this.getFigureDOMElement.closest('.chess-row')
 
             if(rowElement.parentElement) {
                 return {
