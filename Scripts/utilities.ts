@@ -33,9 +33,10 @@ export class Utility {
     }
 
     static activateFigure(figureClass: Piece ) {
-        if(!figureClass.isActive){
+        const figure = figureClass.getFigureDOMElement
+        if(!figureClass.isActive && figure){
             figureClass.isActive = true
-            figureClass.getFigureDOMElement.classList.add('active')
+            figure.classList.add('active')
         }
     }
 
