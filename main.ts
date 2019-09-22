@@ -247,6 +247,7 @@ export class Piece {
 
     move(cordsConfig: Cords) {
         const figureCords = this.getFigureCords
+
         if(figureCords) {
             const figureElement = this.getFigureDOMElement
             const finishMoveSequence = () => {
@@ -256,13 +257,19 @@ export class Piece {
                     figureElement.classList.remove('transforming')
                     Utility.getElemenyByCords(cordsConfig).appendChild(figureElement)
                     figureElement.removeEventListener('transitionend', finishMoveSequence)
+                    Utility.getFigureByCords(cordsConfig).isActive = false
                 }
             }
+
+            if(figureElement) {
+                figureElement.addEventListener('transitionend', finishMoveSequence)
     
-            figureElement.addEventListener('transitionend', finishMoveSequence)
-    
-            this.getFigureDOMElement.classList.add('transforming')
-            this.getFigureDOMElement.style.transform = `translateY(${100 * (figureCords.y - cordsConfig.y)}%) translateX(${100 * (cordsConfig.x - figureCords.x)}%)`
+                figureElement.classList.add('transforming')
+                figureElement.classList.remove('active')
+
+                figureElement.style.transform = `translateY(${100 * (figureCords.y - cordsConfig.y)}%) translateX(${100 * (cordsConfig.x - figureCords.x)}%)`
+            }
+
         }
     }
 
