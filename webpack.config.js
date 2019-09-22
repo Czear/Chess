@@ -5,12 +5,12 @@ module.exports = {
     entry: "./main.ts",
     watch: true,
     output: {
-        path: path.resolve(__dirname, "webpack-output"),
+        path: path.resolve(__dirname, "dist"),
         filename: "bundle.js",
-        publicPath: '/webpack-output/',
+        publicPath: '/dist/',
     },
     devServer: {
-        publicPath: '/webpack-output/',
+        publicPath: '/dist/',
         watchContentBase: true,    
         compress: true,
     },
