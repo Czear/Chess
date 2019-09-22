@@ -18,12 +18,12 @@ module.exports = {
         rules: [
             {
                 test: /\.scss$/,
-                use: [ 'style-loader', 'css-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.ts$/,
                 exclude: /(node_modules|bower_components)/,
-                use: [ 'babel-loader', 'ts-loader']
+                use: ['babel-loader', 'ts-loader']
             }
         ]
     },
