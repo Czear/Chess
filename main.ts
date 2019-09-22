@@ -154,12 +154,30 @@ export let chessPieces: chessPieces = {
 
                 if(targetFigure) {
                     const addValue = targetFigure.color === 'white' ? 1 : -1
-
-                    moveCors.push({
+                    const nextFieldCords: Cords = {
                         ...cordsConfig,
                         y : cordsConfig.y + addValue
+                    }
+
+                    const potentialEnemiesSpots = [{
+                        ...nextFieldCords,
+                        x: nextFieldCords.x-1
+                    },{
+                        ...nextFieldCords,
+                        x: nextFieldCords.x+1
+                    }]
+
+                    if(!Utility.getFigureByCords(nextFieldCords)) {
+                        moveCors.push(nextFieldCords)
+                    }
+
+                    potentialEnemiesSpots.forEach(possibleEnemyCords => {
+                        const possibleEnemyPiece = Utility.getFigureByCords(possibleEnemyCords)
+
+                        if(possibleEnemyPiece && possibleEnemyPiece.color !== targetFigure.color) {
+                            moveCors.push(possibleEnemyCords)
+                        }
                     })
-        
         
                     if((targetFigure.color === 'black' && cordsConfig.y === 6) || (targetFigure.color === 'white' && cordsConfig.y === 1)) {
                         moveCors.push({
