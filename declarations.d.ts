@@ -40,3 +40,8 @@ type Axis = 'x' | 'y'
 type Color = 'black' | 'white'
 type Direction = 'up' | 'down'
 type PieceType = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
+
+declare module "*.svg" {
+    const content: any;
+    export default content;
+}

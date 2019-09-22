@@ -1,11 +1,18 @@
 import { Utility } from '@Scripts/utilities'
 import { Board } from '@Scripts/board'
 
+import pawnSVG from '@Assets/chess-pawn.svg'
+import rookSVG from '@Assets/chess-rook.svg'
+import knightSVG from '@Assets/chess-knight.svg'
+import bishopSVG from '@Assets/chess-bishop.svg'
+import queenSVG from '@Assets/chess-queen.svg'
+import kingSVG from '@Assets/chess-king.svg'
+
 require('./main.scss')
 
 export let chessPieces: chessPieces = { 
     king : {
-        asset: 'Assets/chess-king.svg',
+        asset: kingSVG,
         getAvailableMoves: cordsConfig => {
             let moveCors = []
             const targetFigure = Utility.getFigureByCords(cordsConfig)
@@ -34,7 +41,7 @@ export let chessPieces: chessPieces = {
     },
 
     queen: {
-        asset: 'Assets/chess-queen.svg',
+        asset: queenSVG,
         getAvailableMoves: cordsConfig => {
             const getFields = (checkingAxis: Axis): Cords[] => {
                 let moveCors: Cords[] = []
@@ -56,7 +63,7 @@ export let chessPieces: chessPieces = {
     },
 
     rook: {
-        asset: 'Assets/chess-rook.svg',
+        asset: rookSVG,
         getAvailableMoves: cordsConfig => {
             const getFields = (checkingAxis: Axis): Cords[] => {
                 const moveCors = [ ...Utility.getStragightFields('up', checkingAxis, cordsConfig), ...Utility.getStragightFields('down', checkingAxis, cordsConfig)]
@@ -71,7 +78,7 @@ export let chessPieces: chessPieces = {
     },
 
     bishop: {
-        asset: 'Assets/chess-bishop.svg',
+        asset: bishopSVG,
         getAvailableMoves: cordsConfig => {
             const getFields = (checkingAxis: Axis): Cords[] => {
                 const moveCors = [ ...Utility.getSlantFields('up', checkingAxis, cordsConfig), ...Utility.getSlantFields('down', checkingAxis, cordsConfig)]
@@ -86,7 +93,7 @@ export let chessPieces: chessPieces = {
     },
 
     knight: {
-        asset: 'Assets/chess-knight.svg',
+        asset: knightSVG,
         getAvailableMoves: cordsConfig => {
 
             const validateJumpCords = (jumpCords: Cords[]): Cords[] | [] => {
@@ -147,7 +154,7 @@ export let chessPieces: chessPieces = {
     },
 
     pawn: {
-        asset: 'Assets/chess-pawn.svg',
+        asset: pawnSVG,
         getAvailableMoves: (cordsConfig: Cords) => {
             let moveCors = []
             const targetFigure = Utility.getFigureByCords(cordsConfig)
