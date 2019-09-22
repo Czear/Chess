@@ -207,27 +207,28 @@ function bindUIActions() {
     if(boardsElement) {
         boardsElement.addEventListener('click', event => {
             const target = <HTMLElement>event.target || false
-            if(target && target.parentElement) {
-                let activeFigureClass: Piece | undefined;
-                let availableMoves: Cords[] | boolean = false
+            const targetFigureField =  <HTMLElement>Utility.getFigureFieldOfElement(target)
+            const targetCords = targetFigureField ? <Cords>Utility.getElementCords(targetFigureField) : false
+            if(targetCords) {
                 const activeFigureElement = <HTMLElement>document.querySelector('.chess-figure.active')
-                const figureElement = <HTMLElement>(target.classList.contains('figure-field') ? target.cloneNode(true) : target.parentElement).cloneNode(true)
-                const cordsConfig = Utility.getElementCords(target)
-                const targetFigureClass = Utility.getFigure(figureElement)
-        
-                if(activeFigureElement) {
-                    activeFigureClass = Utility.getFigure(activeFigureElement)
-                    if(activeFigureClass && activeFigureClass.getFigureCords) {
-                        availableMoves = activeFigureClass.getAvailableMoves(activeFigureClass.getFigureCords)
+                const activeFigure = activeFigureElement && activeFigureElement.parentElement ? Utility.getFigureByFigureField(activeFigureElement.parentElement) : false
+                const activeFigureCords = activeFigure ? activeFigure.getFigureCords : false
+                const activeFigureAvailableMoves = activeFigure ? activeFigure.getAvailableMoves(<Cords>activeFigure.getFigureCords) : []
+                const targetFigure = Utility.getFigureByCords(targetCords)   
+    
+                if((!activeFigureElement && targetFigureField.firstChild) || (activeFigure && JSON.stringify(activeFigure.getFigureCords) === JSON.stringify(targetCords))) {
+                    Utility.selfFigureClicked(Utility.getFigureByCords(targetCords))
+                }
+    
+                if(activeFigureElement && activeFigure && activeFigureAvailableMoves.filter(move => JSON.stringify(move) === JSON.stringify(targetCords)).length) {
+                    if(targetFigure && activeFigure.color !== targetFigure.color) {
+                        //enemy piece in the way
+                    } else {
+                        activeFigure.move(targetCords)
                     }
-                }
-        
-                if(target.tagName === 'IMG' && targetFigureClass) {
-                    Utility.figureClicked(targetFigureClass, figureElement)
-                }
-        
-                if(cordsConfig && activeFigureElement && availableMoves && availableMoves.filter(move => JSON.stringify(move) === JSON.stringify(cordsConfig)).length){
-                    Utility.tryMoveFigure(cordsConfig)
+                } else if (activeFigure && targetFigure && activeFigure.color === targetFigure.color && JSON.stringify(targetCords) !== JSON.stringify(activeFigureCords)) {
+                    Utility.deactivateFigure(activeFigure)
+                    Utility.activateFigure(targetFigure)
                 }
             }
         })
