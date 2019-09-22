@@ -24,6 +24,10 @@ module.exports = {
                 test: /\.ts$/,
                 exclude: /(node_modules|bower_components)/,
                 use: ['babel-loader', 'ts-loader']
+            },
+            {
+                test: /\.svg$/,
+                use: ['url-loader']
             }
         ]
     },
