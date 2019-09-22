@@ -14,15 +14,6 @@ export class Utility {
         }
     }
 
-    static tryMoveFigure(targetCords: Cords, availableMoves=0) {
-        const activeFigureElement = <HTMLElement>document.querySelector('.chess-figure.active')
-        const figureToMove = this.getFigure(activeFigureElement)
-        if(activeFigureElement && figureToMove) {
-            figureToMove.move(targetCords)
-            activeFigureElement.classList.remove('active')
-        }
-    }
-
     static deactivateFigures() {
         document.querySelectorAll('.chess-figure').forEach(singleElement => {
             const figureToDeactivate = this.getFigure(<HTMLElement>singleElement)
