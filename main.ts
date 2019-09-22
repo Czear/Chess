@@ -281,6 +281,26 @@ export class Piece {
         }
     }
 
+    remove() {
+        const elementToRemove = this.getFigureDOMElement
+
+        if(elementToRemove) {
+                const finishRemoveSequence = () => {
+                    const figureElement = <HTMLElement>this.getFigureDOMElement
+                    if(figureElement) {
+                        figureElement.removeAttribute('style');
+                        figureElement.classList.remove('transforming')
+                        figureElement.removeEventListener('transitionend', finishRemoveSequence)
+                        elementToRemove.remove()
+                    }
+                }
+
+                elementToRemove.addEventListener('transitionend', finishRemoveSequence)
+                elementToRemove.classList.add('transforming')
+                elementToRemove.style.opacity = '0' 
+        }
+    }
+
     get getPieceLabel(): PieceType {
         return <PieceType>this.pieceType.replace(/-\d/, '')
     }
