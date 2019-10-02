@@ -1,104 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script src="./dist/bundle.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="./dist/bundle.js"></script>
 </head>
+
 <body>
-  <main class="container">
-    <nav class="mian-nav">
-      <div class="nav-content">
-        <button class="new-game">New game</button>
-        <!-- <button class="restart">Restart</button> -->
-      </div>
-    </nav>
-    <div class="chess-board">
-      <div class="fields-container">
-        <div class="pieces-row chess-row" data-startColor="black">
-          <div class="figure-field" data-start="rook"></div>
-          <div class="figure-field" data-start="knight"></div>
-          <div class="figure-field" data-start="bishop"></div>
-          <div class="figure-field" data-start="queen"></div>
-          <div class="figure-field" data-start="king"></div>
-          <div class="figure-field" data-start="bishop"></div>
-          <div class="figure-field" data-start="knight"></div>
-          <div class="figure-field" data-start="rook"></div>
+    <main class="container">
+        <nav class="mian-nav">
+            <div class="nav-content">
+                <button class="new-game">New game</button>
+            </div>
+        </nav>
+        <div class="chess-board">
+            <div class="fields-container">
+                <div class="pieces-row chess-row" data-startColor="black">
+                    <div class="figure-field" data-start="rook"></div>
+                    <div class="figure-field" data-start="knight"></div>
+                    <div class="figure-field" data-start="bishop"></div>
+                    <div class="figure-field" data-start="queen"></div>
+                    <div class="figure-field" data-start="king"></div>
+                    <div class="figure-field" data-start="bishop"></div>
+                    <div class="figure-field" data-start="knight"></div>
+                    <div class="figure-field" data-start="rook"></div>
+                </div>
+                <div class="pieces-row chess-row" data-startColor="black">
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                </div>
+                <div class="chess-row">
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                </div>
+                <div class="chess-row">
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                </div>
+                <div class="chess-row">
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                </div>
+                <div class="chess-row">
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                    <div class="figure-field"></div>
+                </div>
+                <div class="pieces-row chess-row" data-startColor="white">
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                    <div class="figure-field" data-start="pawn"></div>
+                </div>
+                <div class="pieces-row chess-row" data-startColor="white">
+                    <div class="figure-field" data-start="rook"></div>
+                    <div class="figure-field" data-start="knight"></div>
+                    <div class="figure-field" data-start="bishop"></div>
+                    <div class="figure-field" data-start="queen"></div>
+                    <div class="figure-field" data-start="king"></div>
+                    <div class="figure-field" data-start="bishop"></div>
+                    <div class="figure-field" data-start="knight"></div>
+                    <div class="figure-field" data-start="rook"></div>
+                </div>
+            </div>
         </div>
-        <div class="pieces-row chess-row" data-startColor="black">
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-        </div>
-        <div class="chess-row">
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-        </div>
-        <div class="chess-row">
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-        </div>
-        <div class="chess-row">
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-        </div>
-        <div class="chess-row">
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-          <div class="figure-field"></div>
-        </div>
-        <div class="pieces-row chess-row" data-startColor="white">
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-            <div class="figure-field" data-start="pawn"></div>
-        </div>
-        <div class="pieces-row chess-row" data-startColor="white">
-            <div class="figure-field" data-start="rook"></div>
-            <div class="figure-field" data-start="knight"></div>
-            <div class="figure-field" data-start="bishop"></div>
-            <div class="figure-field" data-start="queen"></div>
-            <div class="figure-field" data-start="king"></div>
-            <div class="figure-field" data-start="bishop"></div>
-            <div class="figure-field" data-start="knight"></div>
-            <div class="figure-field" data-start="rook"></div>
-        </div>
-      </div>
-    </div>
-  </main>
+    </main>
 </body>
+
 </html>

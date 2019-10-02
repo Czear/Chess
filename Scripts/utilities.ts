@@ -6,7 +6,7 @@ export class Utility {
     }
 
     static selfFigureClicked(figureClass: Piece) {
-        if(figureClass.isActive) {  
+        if(figureClass.isActive) {
             this.deactivateFigure(figureClass)
         } else {
             this.deactivateFigures()
@@ -17,7 +17,7 @@ export class Utility {
     static deactivateFigures() {
         document.querySelectorAll('.chess-figure').forEach(singleElement => {
             const figureToDeactivate = this.getFigureByFigureField(<HTMLElement>singleElement.parentElement)
-            
+
             if(figureToDeactivate) {
                 this.deactivateFigure(figureToDeactivate)
             }
@@ -71,7 +71,7 @@ export class Utility {
                 elementToReturn = <HTMLElement>element.parentElement.parentElement
             }
         }
- 
+
         return elementToReturn
     }
 
@@ -121,7 +121,7 @@ export class Utility {
                     moveCors.push(possibleCords)
                 }
 
-                
+
             }
         }
 

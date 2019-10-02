@@ -29,11 +29,11 @@ export class Board {
                         figureSelector += id
                         figureType += id
                     }
-    
+
                     let figure = new Piece(<PieceType>figureType, figureColor)
-    
+
                     chessPieces.figures[figureSelector] = figure
-                    tableDataElement.appendChild(figure.getPieceElement)  
+                    tableDataElement.appendChild(figure.getPieceElement)
                 }
             }
         })

@@ -10,7 +10,7 @@ import kingSVG from '@Assets/chess-king.svg'
 
 require('./main.scss')
 
-export let chessPieces: chessPieces = { 
+export let chessPieces: chessPieces = {
     king : {
         asset: kingSVG,
         getAvailableMoves: cordsConfig => {
@@ -24,18 +24,18 @@ export let chessPieces: chessPieces = {
 
                         moveCords.x = cordsConfig.x + Xindex
                         moveCords.y = cordsConfig.y + Yindex
-    
+
                         if(moveCords.x >= 0 && moveCords.x < 8 && moveCords.y >= 0 && moveCords.y < 8){
                             const cordsFigure = Utility.getFigureByCords(moveCords)
 
                                 if(!cordsFigure || (targetFigure && cordsFigure && cordsFigure.color !== targetFigure.color)) {
                                     moveCors.push(moveCords)
-                                }     
+                                }
                         }
                     }
                 }
             }
-            
+
             return moveCors
         }
     },
@@ -185,7 +185,7 @@ export let chessPieces: chessPieces = {
                             moveCors.push(possibleEnemyCords)
                         }
                     })
-        
+
                     if((targetFigure.color === 'black' && cordsConfig.y === 6) || (targetFigure.color === 'white' && cordsConfig.y === 1)) {
                         moveCors.push({
                             ...cordsConfig,
@@ -228,12 +228,12 @@ function bindUIActions() {
                 const activeFigure = activeFigureElement && activeFigureElement.parentElement ? Utility.getFigureByFigureField(activeFigureElement.parentElement) : false
                 const activeFigureCords = activeFigure ? activeFigure.getFigureCords : false
                 const activeFigureAvailableMoves = activeFigure ? activeFigure.getAvailableMoves(<Cords>activeFigure.getFigureCords) : []
-                const targetFigure = Utility.getFigureByCords(targetCords)   
-    
+                const targetFigure = Utility.getFigureByCords(targetCords)
+
                 if((!activeFigureElement && targetFigureField.firstChild) || (activeFigure && JSON.stringify(activeFigure.getFigureCords) === JSON.stringify(targetCords))) {
                     Utility.selfFigureClicked(Utility.getFigureByCords(targetCords))
                 }
-    
+
                 if(activeFigureElement && activeFigure && activeFigureAvailableMoves.filter(move => JSON.stringify(move) === JSON.stringify(targetCords)).length) {
                     activeFigure.move(targetCords)
                     if(targetFigure && activeFigure.color !== targetFigure.color) {
@@ -277,7 +277,7 @@ export class Piece {
 
             if(figureElement) {
                 figureElement.addEventListener('transitionend', finishMoveSequence)
-    
+
                 figureElement.classList.add('transforming')
                 figureElement.classList.remove('active')
 
@@ -303,7 +303,7 @@ export class Piece {
 
                 elementToRemove.addEventListener('transitionend', finishRemoveSequence)
                 elementToRemove.classList.add('transforming')
-                elementToRemove.style.opacity = '0' 
+                elementToRemove.style.opacity = '0'
         }
     }
 

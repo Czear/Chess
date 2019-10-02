@@ -1,43 +1,43 @@
 {
-  "name": "chess",
-  "version": "1.0.0",
-  "description": "Chess game",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js -p",
-    "dev-server": "webpack-dev-server --config webpack.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Czear/Chess.git"
-  },
-  "keywords": [
-    "chess",
-    "puzzle",
-    "logic"
-  ],
-  "author": "Cezary Wakuliński",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Czear/Chess/issues"
-  },
-  "homepage": "https://github.com/Czear/Chess#readme",
-  "dependencies": {},
-  "devDependencies": {
-    "@babel/core": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
-    "babel": "^6.23.0",
-    "babel-loader": "^8.0.6",
-    "css-loader": "^3.2.0",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
-    "style-loader": "^1.0.0",
-    "ts-loader": "^6.1.0",
-    "typescript": "^3.6.3",
-    "url-loader": "^2.1.0",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.1"
-  }
+    "name": "chess",
+    "version": "1.0.0",
+    "description": "Chess game",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --config webpack.config.js -p",
+        "dev-server": "webpack-dev-server --config webpack.config.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Czear/Chess.git"
+    },
+    "keywords": [
+        "chess",
+        "puzzle",
+        "logic"
+    ],
+    "author": "Cezary Wakuliński",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Czear/Chess/issues"
+    },
+    "homepage": "https://github.com/Czear/Chess#readme",
+    "dependencies": {},
+    "devDependencies": {
+        "@babel/core": "^7.6.0",
+        "@babel/preset-env": "^7.6.0",
+        "babel": "^6.23.0",
+        "babel-loader": "^8.0.6",
+        "css-loader": "^3.2.0",
+        "node-sass": "^4.12.0",
+        "sass-loader": "^8.0.0",
+        "style-loader": "^1.0.0",
+        "ts-loader": "^6.1.0",
+        "typescript": "^3.6.3",
+        "url-loader": "^2.1.0",
+        "webpack": "^4.40.2",
+        "webpack-cli": "^3.3.9",
+        "webpack-dev-server": "^3.8.1"
+    }
 }
