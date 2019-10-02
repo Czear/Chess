@@ -1,4 +1,5 @@
 const path = require('path')
+dashboardPlugin = require("webpack-dashboard/plugin");
 
 module.exports = {
     mode: "development",
@@ -31,6 +32,7 @@ module.exports = {
             }
         ]
     },
+    plugins: [new dashboardPlugin()],
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         alias: {
