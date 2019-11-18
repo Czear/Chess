@@ -1,22 +1,23 @@
-import { chessPieces, Piece } from "../main"
+import { Piece } from "../main"
+import { gameConfig } from "./gameConfig"
 
 export class Utility {
-    static nodeListToArray(nodeList: NodeList) {
+    static nodeListToArray(nodeList: NodeList): Element[] {
         return  Array.prototype.slice.call(nodeList)
     }
 
     static selfFigureClicked(figureClass: Piece) {
-        if(figureClass.isActive) {
+        if(figureClass._isActive) {
             this.deactivateFigure(figureClass)
         } else {
-            this.deactivateFigures()
+            this.deactivateFigures();
             this.activateFigure(figureClass)
         }
     }
 
     static deactivateFigures() {
         document.querySelectorAll('.chess-figure').forEach(singleElement => {
-            const figureToDeactivate = this.getFigureByFigureField(<HTMLElement>singleElement.parentElement)
+            const figureToDeactivate = this.getFigureByFigureField(singleElement.parentElement as HTMLElement);
 
             if(figureToDeactivate) {
                 this.deactivateFigure(figureToDeactivate)
@@ -25,36 +26,33 @@ export class Utility {
     }
 
     static deactivateFigure(figureClass: Piece ): void {
-        const figure = figureClass.getFigureDOMElement
-        if(figureClass.isActive && figure){
-            figureClass.isActive = false
+        const figure = figureClass.DOMElement;
+        if(figureClass._isActive && figure){
+            figureClass._isActive = false;
             figure.classList.remove('active')
         }
     }
 
     static activateFigure(figureClass: Piece ) {
-        const figure = figureClass.getFigureDOMElement
-        if(!figureClass.isActive && figure){
-            figureClass.isActive = true
+        const figure = figureClass.DOMElement;
+        if(!figureClass._isActive && figure){
+            figureClass._isActive = true;
             figure.classList.add('active')
         }
     }
 
-    static getFigureByFigureField(figureElement: HTMLElement): Piece | undefined {
-        const chessFiugreElement = <HTMLElement>figureElement.firstChild
-        if(chessFiugreElement) {
-            return chessPieces.figures[chessFiugreElement.dataset.color + '-' + chessFiugreElement.dataset.type]
-        }
+    static getFigureByFigureField(figureElement: HTMLElement): Piece | undefined  {
+        const chessFigureElement = figureElement.firstChild as HTMLElement;
+
+        return chessFigureElement ? gameConfig.figures[chessFigureElement.id] as Piece : undefined
     }
 
-    static getElementCords(element: HTMLElement): Cords | undefined {
-        const rowElement = element.parentElement
+    static getElementCords(element: HTMLElement): ICords {
+        const rowElement = element.parentElement as HTMLElement;
 
-        if(rowElement && rowElement.parentElement) {
-            return {
-                x: this.nodeListToArray(rowElement.querySelectorAll('.figure-field')).indexOf( element ),
-                y: this.nodeListToArray(rowElement.parentElement.querySelectorAll('.chess-row')).reverse().indexOf( rowElement )
-            }
+        return {
+            x: this.nodeListToArray(rowElement.querySelectorAll('.figure-field')).indexOf( element ),
+            y: rowElement.parentElement ? this.nodeListToArray(rowElement.parentElement.querySelectorAll('.chess-row')).reverse().indexOf( rowElement ) : 0
         }
     }
 
@@ -63,24 +61,24 @@ export class Utility {
 
 
         if(element.classList.contains('figure-field')) {
-            elementToReturn = <HTMLElement>element
+            elementToReturn = element as HTMLElement
         } else if(element.classList.contains('chess-figure')) {
-            elementToReturn = <HTMLElement>element.parentElement
+            elementToReturn = element.parentElement as HTMLElement
         } else if (element.nodeName === 'IMG') {
             if(element.parentElement) {
-                elementToReturn = <HTMLElement>element.parentElement.parentElement
+                elementToReturn = element.parentElement.parentElement as HTMLElement
             }
         }
 
         return elementToReturn
+    };
+
+    static getElementByCords(cordsConfig: ICords): HTMLElement  {
+        return this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x] as HTMLElement;
     }
 
-    static getElemenyByCords(cordsConfig: Cords): HTMLElement  {
-        return this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x]
-    }
-
-    static getFigureByCords(cordsConfig: Cords): Piece {
-        const figureHTMLElement = this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x]
+    static getFigureByCords(cordsConfig: ICords): Piece {
+        const figureHTMLElement = this.nodeListToArray(this.nodeListToArray(document.querySelectorAll('.chess-row')).reverse()[cordsConfig.y].querySelectorAll('.figure-field'))[cordsConfig.x] as HTMLElement;
 
         let figure: Piece | undefined;
 
@@ -88,51 +86,46 @@ export class Utility {
             figure = this.getFigureByFigureField(figureHTMLElement)
         }
 
-        return <Piece>figure
+        return figure as Piece
     }
 
-    static getStragightFields = (direction: Direction, axis: Axis, baseCords: Cords) => {
-        let moveCors = []
+    static getStraightFields = (direction: Direction, axis: Axis, baseCords: ICords) => {
+        let moveCors: ICords[] = [];
         if(!((direction === 'up' && baseCords[axis] === 7) || (direction === 'down' && baseCords[axis] === 0))) {
-            let conditionNumber = 8
-            let operation = 1
+            let conditionNumber = 8;
+            let operation = 1;
 
             if(direction === 'down') {
-                conditionNumber = -1
-                operation = -1
+                conditionNumber = -1;
+                operation = -1;
             }
 
             for(let iteration = baseCords[axis]+operation; iteration !== conditionNumber;iteration = iteration + operation) {
-                let possibleCords = {...baseCords}
-                possibleCords[axis] = iteration
+                let possibleCords = { ...baseCords };
+                possibleCords[axis] = iteration;
 
-                const possibleFigure = Utility.getFigureByCords(possibleCords)
-                const targetFigure = Utility.getFigureByCords(baseCords)
+                const possibleFigure = Utility.getFigureByCords(possibleCords);
+                const targetFigure = Utility.getFigureByCords(baseCords);
 
                 if(possibleFigure && targetFigure) {
-                    if(possibleFigure.color !== targetFigure.color) {
-                        moveCors.push({
-                            ...possibleCords
-                        })
+                    if(possibleFigure._color !== targetFigure._color) {
+                        moveCors.push({...possibleCords})
                     }
-
-                    break
+                    break;
                 } else {
                     moveCors.push(possibleCords)
                 }
-
-
             }
         }
 
         return moveCors
-    }
+    };
 
-    static getSlantFields = (direction: Direction, axis: Axis, baseCords: Cords): Cords[] => {
-        let possibleMoves: Cords[] = [];
+    static getSlantFields = (direction: Direction, axis: Axis, baseCords: ICords): ICords[] => {
+        let possibleMoves: ICords[] = [];
 
-        let Yincremeter = 0
-        let Xincremeter = 0
+        let Yincremeter = 0;
+        let Xincremeter = 0;
 
         if(direction === 'up') {
             Yincremeter++
@@ -150,24 +143,20 @@ export class Utility {
             const possibleCords = {
                 x: possibleX,
                 y: possibleY
-            }
-            const possibleFigure = Utility.getFigureByCords(possibleCords)
-            const targetFigure = Utility.getFigureByCords(baseCords)
+            };
+            const possibleFigure = Utility.getFigureByCords(possibleCords);
+            const targetFigure = Utility.getFigureByCords(baseCords);
 
             if(targetFigure && possibleFigure) {
-                if (possibleFigure.color !== targetFigure.color) {
-                    possibleMoves.push({
-                        ...possibleCords
-                    })
+                if (possibleFigure._color !== targetFigure._color) {
+                    possibleMoves.push({...possibleCords })
                 }
 
                 break;
             }
 
             if(!possibleFigure) {
-                possibleMoves.push({
-                    ...possibleCords
-                })
+                possibleMoves.push({...possibleCords})
             }
 
         }

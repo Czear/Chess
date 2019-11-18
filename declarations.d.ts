@@ -1,41 +1,45 @@
-interface Cords {
+interface ICords {
     x: number,
     y: number,
 }
 
-interface Piece {
-    isActive: boolean
-    pieceType: PieceType
-    color: Color
-    getPieceLabel: PieceType
-    getPieceElement: HTMLDivElement
-    getFigureDOMElement: HTMLElement | undefined
-    getFigureCords: Cords | undefined
+interface IPiece {
+    _isActive: boolean
+    _pieceType: PieceType
+    _cords: ICords
+    _color: Color
+    _ID: string
+
+    cords: ICords
+    pieceElement: HTMLDivElement
+    DOMElement: HTMLElement | undefined
     getAvailableMoves: availableMoves
-    logFigure: () => void
-    move: (cordsConfig: Cords) => void
     remove: () => void
+    logFigure: () => void
+    createFigure: () => void
 }
 
-interface chessPieces {
-    king: PieceConfig
-    queen: PieceConfig
-    rook: PieceConfig
-    knight: PieceConfig
-    bishop: PieceConfig
-    pawn: PieceConfig
-    figures: {
-        [element: string]: Piece
+interface IChessPieces {
+    [key: string]: IPieceConfig
+}
+
+interface IIngameFigures {
+    [key: string]: IPiece
+}
+
+interface IPieceConfig {
+    asset: string,
+    getAvailableMoves: availableMoves,
+    startingPositions: {
+        [K in Color]: Array<{
+            id: number,
+            cords: ICords
+        }>
     }
 }
 
-interface PieceConfig {
-    asset: string,
-    getAvailableMoves: availableMoves
-}
 
-
-type availableMoves = (cords: Cords) => Cords[]
+type availableMoves = (cords: ICords) => ICords[]
 type Axis = 'x' | 'y'
 type Color = 'black' | 'white'
 type Direction = 'up' | 'down'

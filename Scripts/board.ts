@@ -1,42 +1,35 @@
-import { Utility } from './utilities'
-import { Piece, chessPieces } from '../main'
+import { gameConfig } from './gameConfig'
+import { Piece } from '../main'
 
 export class Board {
-    static restart() {
-        this.resetBoard()
-        this.setBoard()
+    static restart(): void {
+        this.resetBoard();
+        this.setBoard();
     }
 
 
-    static resetBoard() {
-        document.querySelectorAll('.chess-board .figure-field').forEach(cell => {
+    static resetBoard(): void {
+        document.querySelectorAll('.chess-board .figure-field').forEach((cell): void => {
             while(cell.lastChild) {
                 cell.removeChild(cell.lastChild)
             }
         })
     }
 
-    static setBoard() {
-        document.querySelectorAll('.pieces-row .figure-field').forEach(tableDataElement => {
-            if(tableDataElement.parentElement) {
-                let figureColor = <Color>tableDataElement.parentElement.dataset.startcolor
-                let figureType = (<HTMLElement>tableDataElement).dataset.start
-                let figureSelector = figureColor + '-' + figureType
+    static setBoard(): void {
+        Object.entries(gameConfig.chessPieces).forEach(pieceData => {
+            const pieceName = pieceData[0];
+            const pieceConfig = pieceData[1] as IPieceConfig;
 
-                if(figureType) {
-                    if(!['king', 'queen'].includes(figureType)) {
-                        let id = `-${Utility.nodeListToArray(tableDataElement.parentElement.querySelectorAll(`[data-start="${figureType}"]`)).indexOf( tableDataElement )}`;
-                        figureSelector += id
-                        figureType += id
-                    }
-
-                    let figure = new Piece(<PieceType>figureType, figureColor)
-
-                    chessPieces.figures[figureSelector] = figure
-                    tableDataElement.appendChild(figure.getPieceElement)
-                }
+            if(pieceName !== 'figures') {
+                Object.entries(pieceConfig.startingPositions).forEach((pieceConfig): void => {
+                    const pieceColor = pieceConfig[0] as Color;
+                    pieceConfig[1].forEach((pieceDetails): void => {
+                        const pieceID = pieceColor + '-' + pieceName + '-' + pieceDetails.id;
+                        new Piece(<PieceType>pieceName, pieceColor, pieceDetails.cords, pieceID);
+                    })
+                })
             }
         })
-
     }
 }
