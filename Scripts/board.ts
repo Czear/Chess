@@ -3,8 +3,8 @@ import { Piece } from '../main'
 
 export class Board {
     static restart(): void {
-        this.resetBoard();
-        this.setBoard();
+        Board.resetBoard();
+        Board.setBoard();
     }
 
 
@@ -26,7 +26,7 @@ export class Board {
                     const pieceColor = pieceConfig[0] as Color;
                     pieceConfig[1].forEach((pieceDetails): void => {
                         const pieceID = pieceColor + '-' + pieceName + '-' + pieceDetails.id;
-                        new Piece(<PieceType>pieceName, pieceColor, pieceDetails.cords, pieceID);
+                        new Piece(pieceName as PieceType, pieceColor, pieceDetails.cords, pieceID);
                     })
                 })
             }
